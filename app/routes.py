@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify
-
+from .database import log_submission
 main = Blueprint("main", __name__)
 
 @main.route("/", methods=["GET"])
@@ -12,8 +12,14 @@ def analyze():
     code = data.get("code", "")
     error = data.get("error", "")
 
-    # Dummy suggestion (to be replaced later)
+    # Placeholder logic for now
+    concept = "Dynamic Programming (placeholder)"
+    suggestion = "Try checking your base case and memoization."
+
+    # Save to DB
+    log_submission(code, error, concept, suggestion)
+
     return jsonify({
-        "concept": "Dynamic Programming (placeholder)",
-        "suggestion": "Try checking your base case and memoization."
+        "concept": concept,
+        "suggestion": suggestion
     })
