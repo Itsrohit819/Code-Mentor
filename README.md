@@ -106,8 +106,9 @@ These are stored in `app/code_logs.db` for analytics & training.
 **Rohit Singh**  
 🎓 2nd-year student @ IIT Madras BS in Data Science & PW Institute of Innovation  
 💡 Competitive Programmer | GATE CSE Aspirant | AI/ML & Backend Enthusiast  
-📬 [LinkedIn](https://www.linkedin.com/in/rohitsingh-/) 
-🌐 [Portfolio] (https://itsrohit819.github.io/Portfolio/#)
+📬 [LinkedIn](https://www.linkedin.com/in/rohitsingh-/)
+ 
+🌐 [Portfolio](https://itsrohit819.github.io/Portfolio/#)
 
 ---
 
