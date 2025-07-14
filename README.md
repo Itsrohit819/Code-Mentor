@@ -1,6 +1,6 @@
-# 🚀 Code Mentor AI
+# 🚀 Code Mentor
 
-**Code Mentor AI** is an intelligent assistant designed to help developers debug their competitive programming code by identifying the underlying concepts and providing targeted suggestions. Built with a clean full-stack architecture, it integrates a responsive frontend, powerful Flask backend, and persistent SQLite logging. The project is currently evolving to include Machine Learning and LLMs (e.g., OpenAI, LangChain) for smart feedback.
+**Code Mentor** is an intelligent assistant designed to help developers debug their competitive programming code by identifying the underlying concepts and providing targeted suggestions. Built with a clean full-stack architecture, it integrates a responsive frontend, powerful Flask backend, and persistent SQLite logging. The project is currently evolving to include Machine Learning and LLMs (e.g., OpenAI, LangChain) for smart feedback.
 
 ---
 
@@ -37,7 +37,7 @@
 ## 🧭 Project Structure
 
 ```
-code-mentor-ai/
+code-mentor/
 ├── app/
 │   ├── static/              # (Optional) Custom CSS
 │   ├── templates/           # HTML UI (index.html)
@@ -57,7 +57,7 @@ code-mentor-ai/
 1. **Clone the repository**
 ```bash
 git clone https://github.com/YOUR_USERNAME/code-mentor-ai.git
-cd code-mentor-ai
+cd code-mentor
 ```
 
 2. **Install dependencies**
@@ -106,8 +106,8 @@ These are stored in `app/code_logs.db` for analytics & training.
 **Rohit Singh**  
 🎓 2nd-year student @ IIT Madras BS in Data Science & PW Institute of Innovation  
 💡 Competitive Programmer | GATE CSE Aspirant | AI/ML & Backend Enthusiast  
-📬 [LinkedIn](https://linkedin.com/in/your-profile) (Add your actual profile link)  
-🌐 Portfolio / Blog (optional if you have)
+📬 [LinkedIn](https://www.linkedin.com/in/rohitsingh-/) 
+🌐 [Portfolio] (https://itsrohit819.github.io/Portfolio/#)
 
 ---
 
