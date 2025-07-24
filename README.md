@@ -6,9 +6,10 @@
 
 ## 📸 Preview
 
-> ![screenshot](https://via.placeholder.com/800x400.png?text=Insert+UI+Screenshot+Here)
+### 🖼️ User Interface Screens
 
----
+![UI Screenshot 1](./Screenshots/ui1.png)
+![UI Screenshot 2](./Screenshots/ui2.png)
 
 ## ✨ Features
 
