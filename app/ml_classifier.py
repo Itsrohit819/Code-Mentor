@@ -10,7 +10,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.metrics import classification_report, accuracy_score
 from app.config import Config
 import logging
-
+from .compiler_analyzer import compiler_analyzer
 logger = logging.getLogger(__name__)
 
 class EnhancedConceptClassifier:
@@ -23,7 +23,36 @@ class EnhancedConceptClassifier:
             'Tree Algorithms', 'Greedy Algorithm', 'Backtracking',
             'Mathematics', 'General Programming'
         ]
-        
+
+    def predict_concept_with_compiler(self, code: str, language: str = "cpp"):
+        """Enhanced prediction with compiler integration"""
+        try:
+            # First, get compiler analysis
+            compiler_result = compiler_analyzer.analyze_code(code, language)
+            
+            if compiler_result["success"] and not compiler_result["compilation_successful"]:
+                # Compilation failed - prioritize compiler errors
+                primary_issue = compiler_result["primary_issue"]
+                
+                if primary_issue:
+                    return "Compilation Error", 0.95, compiler_result
+            
+            # If compilation succeeds, proceed with existing analysis
+            concept, confidence = self.predict_concept(code)
+            
+            return concept, confidence, {
+                "compilation_successful": compiler_result.get("compilation_successful", True),
+                "compiler_issues": compiler_result.get("issues", []),
+                "exact_fixes": compiler_result.get("exact_fixes", [])
+            }
+            
+        except Exception as e:
+            logger.error(f"Enhanced prediction failed: {str(e)}")
+            # Fallback to existing method
+            concept, confidence = self.predict_concept(code)
+            return concept, confidence, {}
+
+
     def detect_syntax_errors(self, code):
         """Detect common syntax errors with high priority"""
         errors = []

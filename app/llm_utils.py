@@ -16,6 +16,62 @@ class EnhancedLLMSuggestionEngine:
         self.chain = None
         self._initialize_llm()
     
+    def get_suggestion_with_compiler(self, code: str, error: str, concept: str, 
+                                   language: str = "cpp", compiler_data: Dict = None) -> Dict[str, Any]:
+        """Get suggestion with compiler analysis integration"""
+        start_time = time.time()
+        
+        try:
+            # If we have compiler data, prioritize it
+            if compiler_data and compiler_data.get("exact_fixes"):
+                return self._create_compiler_based_suggestion(compiler_data, start_time)
+            
+            # Otherwise use existing LLM logic
+            return self.get_suggestion(code, error, concept, language)
+            
+        except Exception as e:
+            logger.error(f"Enhanced suggestion failed: {str(e)}")
+            return self.get_suggestion(code, error, concept, language)
+    
+    def _create_compiler_based_suggestion(self, compiler_data: Dict, start_time: float) -> Dict[str, Any]:
+        """Create suggestion based on compiler analysis"""
+        exact_fixes = compiler_data.get("exact_fixes", [])
+        
+        if not exact_fixes:
+            return {
+                "suggestion": "Code analysis completed, but no specific fixes identified.",
+                "source": "compiler",
+                "processing_time": time.time() - start_time,
+                "success": True
+            }
+        
+        # Build comprehensive suggestion from compiler fixes
+        suggestion_parts = ["**🔧 Compiler Analysis Results:**\n"]
+        
+        for i, fix in enumerate(exact_fixes, 1):
+            suggestion_parts.append(f"**Issue {i} (Line {fix['line']}):**")
+            suggestion_parts.append(f"❌ **Error:** {fix['original_error']}")
+            suggestion_parts.append(f"✅ **Fix:** {fix['fix_description']}")
+            
+            if fix.get("code_suggestion"):
+                suggestion_parts.append(f"🔧 **Exact Fix:** {fix['code_suggestion']}")
+            
+            suggestion_parts.append(f"💡 **Why:** {fix['explanation']}\n")
+        
+        # Add general advice
+        suggestion_parts.append("**📋 General Tips:**")
+        suggestion_parts.append("• Always check syntax before testing logic")
+        suggestion_parts.append("• Use proper indentation and formatting")
+        suggestion_parts.append("• Verify all brackets and semicolons match")
+        
+        return {
+            "suggestion": "\n".join(suggestion_parts),
+            "source": "compiler_enhanced",
+            "processing_time": time.time() - start_time,
+            "success": True,
+            "exact_fixes": exact_fixes
+        }
+
     def _initialize_llm(self):
         """Initialize the LLM and chain"""
         try:

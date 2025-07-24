@@ -259,6 +259,45 @@ class CodeMentor {
         if (confidence >= 0.6) return 'bg-warning';
         return 'bg-danger';
     }
+    showResults(data, clientTime) {
+        // Hide error section
+        this.errorSection.style.display = 'none';
+        
+        // Populate results
+        this.conceptResult.textContent = data.concept || 'Unknown';
+        this.conceptResult.className = `badge ${this.getConceptColor(data.concept)}`;
+        
+        this.confidenceResult.textContent = data.confidence ? 
+            `${(data.confidence * 100).toFixed(1)}%` : 'N/A';
+        this.confidenceResult.className = `badge ${this.getConfidenceColor(data.confidence)}`;
+        
+        // Enhanced suggestion display with compiler results
+        this.suggestionResult.innerHTML = this.formatSuggestion(data.suggestion || 'No suggestion available');
+        
+        this.processingTime.textContent = data.processing_time ? 
+            `${data.processing_time}s (client: ${clientTime}s)` : `${clientTime}s`;
+        
+        this.submissionId.textContent = data.id || 'Unknown';
+
+        // Add compiler analysis indicators
+        this.addCompilerIndicators(data);
+        
+        // Show exact fixes if available
+        if (data.exact_fixes_available && data.exact_fixes) {
+            this.showExactFixes(data.exact_fixes);
+        }
+
+        // Show results with animation
+        this.resultsSection.style.display = 'block';
+        this.resultsSection.classList.add('fade-in');
+        
+        this.resultsSection.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+        });
+
+        this.setStatus('ready', 'Complete');
+    }
 }
 
 // Initialize the application when DOM is loaded

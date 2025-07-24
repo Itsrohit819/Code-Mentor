@@ -18,6 +18,7 @@ def analyze_code():
     start_time = time.time()
     
     try:
+        # Validate request
         if not request.is_json:
             return jsonify({'error': 'Request must be JSON'}), 400
         
@@ -32,23 +33,22 @@ def analyze_code():
         if len(code) > 10000:
             return jsonify({'error': 'Code too long (max 10000 characters)'}), 400
         
-        # 🔍 Run classifier for concept + confidence
-        analysis = classifier.get_detailed_analysis(code)
-        concept = analysis['concept']
-        confidence = analysis['confidence']
+        # Enhanced analysis with compiler integration
+        concept, confidence, compiler_data = classifier.predict_concept_with_compiler(code, language)
         
-        # 💡 Generate suggestion using LLM
-        suggestion_result = llm_engine.get_suggestion(
-            code=code,
-            error=error,
-            concept=concept,
+        # Get enhanced suggestion with compiler data
+        suggestion_result = llm_engine.get_suggestion_with_compiler(
+            code=code, 
+            error=error, 
+            concept=concept, 
             language=language,
-            confidence=confidence
+            compiler_data=compiler_data
         )
         
+        # Calculate total processing time
         total_time = time.time() - start_time
         
-        # 🗃️ Save in database
+        # Save to database
         submission = CodeSubmission(
             code=code,
             error=error,
@@ -57,29 +57,32 @@ def analyze_code():
             confidence_score=confidence,
             processing_time=total_time
         )
+        
         db.session.add(submission)
         db.session.commit()
         
+        # Enhanced response with compiler data
         response = {
             'id': submission.id,
             'concept': concept,
             'confidence': round(confidence, 2),
             'suggestion': suggestion_result['suggestion'],
             'processing_time': round(total_time, 2),
-            'llm_used': suggestion_result['source'] == 'llm',
-            'error_type': concept,
-            'detailed_analysis': {
-                'syntax_errors': len(analysis['syntax_errors']),
-                'compilation_errors': len(analysis['compilation_errors']),
-                'logic_errors': len(analysis['logic_errors'])
-            },
+            'analysis_source': suggestion_result.get('source', 'rule_based'),
+            'compilation_successful': compiler_data.get('compilation_successful', True),
+            'compiler_issues': len(compiler_data.get('compiler_issues', [])),
+            'exact_fixes_available': len(compiler_data.get('exact_fixes', [])) > 0,
             'timestamp': submission.timestamp.isoformat()
         }
+        
+        # Add exact fixes if available
+        if compiler_data.get('exact_fixes'):
+            response['exact_fixes'] = compiler_data['exact_fixes']
         
         logger.info(f"Enhanced analysis completed for submission {submission.id} in {total_time:.2f}s - {concept}")
         
         return jsonify(response)
-    
+        
     except Exception as e:
         logger.error(f"Error in analyze_code: {str(e)}")
         return jsonify({
