@@ -38,17 +38,19 @@
 ## 🧭 Project Structure
 
 ```
-code-mentor/
-├── app/
-│   ├── static/              # (Optional) Custom CSS
-│   ├── templates/           # HTML UI (index.html)
-│   ├── __init__.py          # Flask app initialization
-│   ├── routes.py            # API endpoints
-│   ├── database.py          # SQLite logging functions
-│   └── code_logs.db         # SQLite DB storing submissions
-├── run.py                   # Entry point
-├── requirements.txt         # Python dependencies
-└── README.md                # Project info (this file)
+CODE-MENTOR/
+├── app/                    # Main Flask application code
+├── data/                   # (Optional) Data files or sample inputs
+├── instance/               # Flask instance folder (e.g., for config or DB)
+├── models/                 # Model or schema definitions
+├── Screenshots/            # UI screenshots for documentation
+├── venv/                   # Virtual environment (ignored by Git)
+├── .env                    # Environment variables file
+├── .gitignore              # Git ignore rules
+├── README.md               # Project information
+├── requirements.txt        # Python dependencies
+└── run.py                  # Entry point to run the app
+
 ```
 
 ---
